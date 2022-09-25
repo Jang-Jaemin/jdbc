@@ -3,8 +3,12 @@ package hello.jdbc.repository;
 import hello.jdbc.connection.DBConnectionUtil;
 import hello.jdbc.domain.Member;
 import lombok.extern.slf4j.Slf4j;
+import java.util.NoSuchElementException;
 
 import java.sql.*;
+
+import static hello.jdbc.connection.DBConnectionUtil.getConnection;
+import static org.springframework.boot.SpringApplication.close;
 
 /**
  * JDBC - DriverManager 사용
@@ -12,7 +16,8 @@ import java.sql.*;
 @Slf4j
 public class MemberRepositoryV0 {
 
-    public Member save(Member member) throws SQLException{
+
+    public Member save(Member member) throws SQLException {
         String sql = "insert int member(member_id, momey) values(?,?)";
 
         Connection con = null;
@@ -25,36 +30,95 @@ public class MemberRepositoryV0 {
             pstmt.setInt(2, member.getMoney());
             pstmt.executeUpdate();
             return member;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             log.error("db error", e);
             throw e;
-        }finally {
-            close(con,pstmt,null);
+        } finally {
+            close(con, pstmt, null);
         }
     }
-    private void close(Connection con, Statement stmt, ResultSet rs){
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            } }
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            } }
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                log.info("error", e);
+
+    //  MemberRepositoryV0 - 회원조회추가
+    public Member findById(String memberId) throws SQLException {
+        String sql = "select * from member where member_id = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, memberId);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Member member = new Member();
+                member.setMemberId(rs.getString("member_id"));
+                member.setMoney(rs.getInt("money"));
+                return member;
+            } else {
+                throw new NoSuchElementException("member not found memberId=" + memberId);
+            }catch(SQLException e){
+                log.error("db error", e);
+                throw e;
+            }finally{
+                close(con, pstmt, rs);
+                //  executeUpdate()는쿼리를실행하고영향받은 row수를반환한다.
+                //  여기서는하나의데이터만변경하기 때문에결과로 1이반환된다.
+                //  만약회원이 100명이고, 모든회원의데이터를한번에수정하는 update sql 을실행하면결과는 100이된다.
             }
         }
-      }
-    private Connection getConnection() {
-        return DBConnectionUtil.getConnection(); }
+
+        //   MemberRepositoryV0 - 회원 수정 추가.
+        public void update(String memberId, int money) throws SQLException {
+            String sql = "update member set money=? where member_id=?";
+
+            Connection con = null;
+            PreparedStatement pstmt = null;
+
+            try {
+                con = getConnection();
+                pstmt = con.prepareStatement(sql);
+                pstmt.setInt(1, money);
+                pstmt.setString(2, memberId);
+                int resultSize = pstmt.executeUpdate();
+                log.info("resultSize={}", resultSize);
+            } catch (SQLException e) {
+                log.error("db error", e);
+                throw e;
+            } finally {
+                close(con, pstmt, null); }
+        }
+
+
+        private void close (Connection con, Statement stmt, ResultSet rs){
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    log.info("error", e);
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    log.info("error", e);
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    log.info("error", e);
+                }
+            }
+        }
+        private Connection getConnection () {
+            return (Member) getConnection();
+        }
+    }
 }
 
 
