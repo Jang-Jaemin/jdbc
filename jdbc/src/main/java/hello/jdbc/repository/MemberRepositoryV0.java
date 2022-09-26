@@ -16,7 +16,7 @@ import static org.springframework.boot.SpringApplication.close;
 @Slf4j
 public class MemberRepositoryV0 {
 
-
+    // 회원 등록 save
     public Member save(Member member) throws SQLException {
         String sql = "insert int member(member_id, momey) values(?,?)";
 
@@ -88,10 +88,34 @@ public class MemberRepositoryV0 {
                 log.error("db error", e);
                 throw e;
             } finally {
-                close(con, pstmt, null); }
+                close(con, pstmt, null);
+            }
         }
 
+        //  회원 삭제 추가.
 
+        public void delete(String memberId) throws SQLException {
+            String sql = "delete from member where member_id=?";
+
+            Connection con = null;
+            PreparedStatement pstmt = null;
+
+            try {
+                con = getConnection();
+                pstmt = con.prepareStatement(sql);
+                pstmt.setString(1, memberId);
+
+                pstmt.executeUpdate();
+
+            } catch (SQLException e) {
+                log.error("db error", e);
+                throw e;
+            } finally {
+                close(con, pstmt, null);
+            }
+        }
+
+        // 회원 등록 close
         private void close (Connection con, Statement stmt, ResultSet rs){
             if (rs != null) {
                 try {
