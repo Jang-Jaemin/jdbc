@@ -5,10 +5,13 @@ import hello.jdbc.repository.MemberRepositoryV1;
 import hello.jdbc.repository.MemberRepositoryV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.buffer.DataBuffer;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import static org.springframework.core.io.buffer.DataBufferUtils.release;
 
 
 //  트랜젝션을 적용한 코드이다
@@ -28,7 +31,7 @@ public class MemberServiceV2 {
         } catch (Exception e) {
             con.rollback(); //실패시 롤백
             throw new IllegalStateException(e); } finally {
-            release(con);
+            release((DataBuffer) con);
         }
     }
     private void bizLogic(Connection con, String fromId, String toId, int money) throws SQLException {

@@ -51,4 +51,12 @@ public class Etc {
     //  이코드들은유사한코드의반복이너무많다.
     //  try, catch, finally ...
     //  커넥션을열고, PreparedStatement를사용하고, 결과를매핑하고... 실행하고, 커넥션과리소스를 정리한다.
+
+
+
+
+
+
+
+
 }
