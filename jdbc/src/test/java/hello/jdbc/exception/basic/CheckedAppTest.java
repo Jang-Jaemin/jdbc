@@ -1,3 +1,5 @@
+/** 체크 예외 문제점 코드 App Test **/
+
 package hello.jdbc.exception.basic;
 
 import lombok.extern.slf4j.Slf4j;
