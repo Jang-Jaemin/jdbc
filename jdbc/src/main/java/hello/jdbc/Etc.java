@@ -98,6 +98,47 @@ public class Etc {
     //  이렇게해결이불가능한공통예외는별도의오류로그를남기고, 개발자가오류를빨리인지할수 있도록메일, 알림(문자, 슬랙)등을통해서전달받아야한다.
     //  예를들어서SQLException이잘못된 SQL을작성해서발생했다면, 개발자가해당 SQL을수정해서배포하기전까지사용자는같은문제를 겪게된다
 
+    /** 예외 포함과 스택 트레이스
+     *  예외를전환할때는 꼭! 기존예외를포함해야한다. 그렇지않으면스택트레이스를확인할때심각한 문제가발생한다.
+     *  예시 )
+     *  @Test
+     *  void printEx() {
+     *  Controller controller = new Controller();
+     *  try {
+     *         controller.request();
+     *  } catch (Exception e) {
+     *      //e.printStackTrace();
+     *         log.info("ex", e);
+     *       }
+     *  }
+     * **/
+    //  로그를출력할때마지막파라미터에예외를넣어주면로그에스택트레이스를출력할수있다.
+    //  예) log.info("message={}", "message", ex), 여기에서마지막에ex를전달하는것을확인할 수있다. 이렇게하면스택트레이스에로그를출력할수있다.
+    //  예) log.info("ex", ex) 지금예에서는파라미터가없기때문에, 예외만파라미터에전달하면스택 트레이스를로그에출력할수있다.
+    //  System.out에스택트레이스를출력하려면e.printStackTrace()를사용하면된다.
+    // 실무에서는 항상 로그를 사용해야한다.
 
+    /** 기존 예외를 포함하는 경우
+     *  public void call() {
+     *   try {
+     *  runSQL();
+     *      } catch (SQLException e) {
+     *      throw new RuntimeSQLException(e); //기존 예외(e) 포함 }
+     *  }
+     * **/
+    // 예외를 포함해서 기존에 발생한 java.sql.SQLException 과 스택 트레이스르 확인할 수 있다.
 
+    /** 기존 예외를 포함하지 않는 경우
+     *  public void call() {
+     *       try {
+     *      runSQL();
+     *      } catch (SQLException e) {
+     *       throw new RuntimeSQLException(); //기존 예외(e) 제외
+     *     }
+     *  }
+     * **/
+    //  예외를포함하지않아서기존에발생한java.sql.SQLException과스택트레이스를확인할수없다.
+    //  변환한RuntimeSQLException부터예외를확인할수있다.
+    //  만약실제 DB에연동했다면 DB에서발생한 예외를확인할수없는심각한문제가발생한다.
+    // 예외를 전환할 떄는 꼭 기존 예외를 포함시키자 . 제발 !!!
 }
