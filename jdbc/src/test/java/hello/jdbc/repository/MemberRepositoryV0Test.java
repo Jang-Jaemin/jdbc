@@ -1,7 +1,6 @@
 package hello.jdbc.repository;
 
 import hello.jdbc.domain.Member;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -17,7 +16,7 @@ public class MemberRepositoryV0Test {
     @Test
     void crud() throws SQLException {
         //save
-        Member member = new Member("memberV0", 10000);
+        Member member = new Member();
         repository.save(member);
 
         //findById

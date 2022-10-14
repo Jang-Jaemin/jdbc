@@ -1,7 +1,6 @@
 package hello.jdbc.service;
 
 import hello.jdbc.domain.Member;
-import hello.jdbc.repository.MemberRepositoryV1;
 import hello.jdbc.repository.MemberRepositoryV2;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +42,8 @@ public class MemberServiceV2Test {
         @DisplayName("정상 이체")
         void accountTransfer() throws SQLException {
             //given
-            Member memberA = new Member("memberA", 10000);
-            Member memberB = new Member("memberB", 10000);
+            Member memberA = new Member();
+            Member memberB = new Member();
             memberRepository.save(memberA);
             memberRepository.save(memberB);
             //when
@@ -60,8 +59,8 @@ public class MemberServiceV2Test {
         @DisplayName("이체중 예외 발생")
         void accountTransferEx() throws SQLException {
             //given
-            Member memberA = new Member("memberA", 10000);
-            Member memberEx = new Member("ex", 10000);
+            Member memberA = new Member();
+            Member memberEx = new Member();
             memberRepository.save(memberA);
             memberRepository.save(memberEx);
             //when

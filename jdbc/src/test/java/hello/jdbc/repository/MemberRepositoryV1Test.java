@@ -36,7 +36,7 @@ class MemberRepositoryV1Test {
         log.info("start");
 
         //save
-        Member member = new Member("memberV0", 10000);
+        Member member = new Member();
         repository.save(member);
 
         //findById

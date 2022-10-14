@@ -8,9 +8,9 @@ public class Member {
     private String memberId;
     private int money;
 
-    public Member(String memberV0, int i){
+    public Member(){
     }
-    public MEmber(String memberId, int money){
+    public MEmber(){
         this.memberId = memberId;
         this.money = money;
     }

@@ -12,14 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import static hello.jdbc.connection.ConnectionConst.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -92,8 +88,8 @@ public class MemberServiceV3_4Test {
         @DisplayName("정상 이체")
         void accountTransfer() throws SQLException {
             //given
-            Member memberA = new Member(MEMBER_A, 10000);
-            Member memberB = new Member(MEMBER_B, 10000);
+            Member memberA = new Member();
+            Member memberB = new Member();
             memberRepository.save(memberA);
             memberRepository.save(memberB);
 
@@ -111,8 +107,8 @@ public class MemberServiceV3_4Test {
         @DisplayName("이체중 예외 발생")
         void accountTransferEx() throws SQLException {
             //given
-            Member memberA = new Member(MEMBER_A, 10000);
-            Member memberEx = new Member(MEMBER_EX, 10000);
+            Member memberA = new Member();
+            Member memberEx = new Member();
             memberRepository.save(memberA);
             memberRepository.save(memberEx);
 

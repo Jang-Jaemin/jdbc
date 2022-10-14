@@ -50,8 +50,8 @@ public class MemberServiceV3_2Test {
         @DisplayName("정상 이체")
         void accountTransfer() throws SQLException {
             //given
-            Member memberA = new Member(MEMBER_A, 10000);
-            Member memberB = new Member(MEMBER_B, 10000);
+            Member memberA = new Member();
+            Member memberB = new Member();
             memberRepository.save(memberA);
             memberRepository.save(memberB);
 
@@ -69,8 +69,8 @@ public class MemberServiceV3_2Test {
         @DisplayName("이체중 예외 발생")
         void accountTransferEx() throws SQLException {
             //given
-            Member memberA = new Member(MEMBER_A, 10000);
-            Member memberEx = new Member(MEMBER_EX, 10000);
+            Member memberA = new Member();
+            Member memberEx = new Member();
             memberRepository.save(memberA);
             memberRepository.save(memberEx);
 

@@ -4,7 +4,6 @@ import hello.jdbc.domain.Member;
 import hello.jdbc.repository.MemberRepositoryV3;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.support.AopUtils;
@@ -83,8 +82,8 @@ public class MemberServiceV3_3Test {
         @DisplayName("정상 이체")
         void accountTransfer() throws SQLException {
             //given
-            Member memberA = new Member(MEMBER_A, 10000);
-            Member memberB = new Member(MEMBER_B, 10000);
+            Member memberA = new Member();
+            Member memberB = new Member();
             memberRepository.save(memberA);
             memberRepository.save(memberB);
 
@@ -102,8 +101,8 @@ public class MemberServiceV3_3Test {
         @DisplayName("이체중 예외 발생")
         void accountTransferEx() throws SQLException {
             //given
-            Member memberA = new Member(MEMBER_A, 10000);
-            Member memberEx = new Member(MEMBER_EX, 10000);
+            Member memberA = new Member();
+            Member memberEx = new Member();
             memberRepository.save(memberA);
             memberRepository.save(memberEx);
 
